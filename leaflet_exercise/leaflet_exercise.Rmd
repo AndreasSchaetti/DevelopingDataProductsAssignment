@@ -1,0 +1,117 @@
+---
+title: "Holidays in Scotland"
+author: "Andreas Schätti"
+output: html_document
+---
+
+```{r, echo=FALSE}
+today <- Sys.Date()
+```
+
+## `r format(today, "%A, %d %B %Y")`
+
+```{r, echo=FALSE, message=FALSE}
+library(leaflet)
+
+scotLat <- c(
+  55.94854,
+  55.95278,
+  55.97634,
+  56.4157,
+  56.11457,
+  56.57115,
+  56.90955,
+  57.50399,
+  57.44815,
+  57.30205,
+  57.27299,
+  57.85874,
+  58.25569,
+  58.67068,
+  58.64298,
+  58.44234,
+  57.98109,
+  57.8256,
+  56.29163  
+  )
+
+scotLng <- c(
+  -3.20048,
+  -3.20478,
+  -3.17248,
+  -5.47751,
+  -5.50839,
+  -5.39056,
+  -5.84776,
+  -6.20233,
+  -6.59149,
+  -6.36018,
+  -5.5234,
+  -5.81668,
+  -5.02532,
+  -3.38303,
+  -3.03323,
+  -3.09192,
+  -3.94581,
+  -4.08339,
+  -2.97228
+  )
+
+scotSites <- c(
+    "<a href='www.edinburghcastle.gov.uk'>Edinburgh Castle</a>",
+    "<a href='www.oxfordbar.co.uk'>Edinburgh, Oxford Bar</a>",
+    "<a href='www.visitscotland.com/info/towns-villages/leith-p918421'>Edinburgh, Leith</a>",
+    "<a href='www.explore-oban.com'>Oban</a>",
+    "<a href='www.visitscotland.com/info/see-do/kilmartin-glen-p247711'>Kilmartin, Standing Stones</a>",
+    "<a href='www.castlestalker.com'>Castle Stalker</a>",
+    "<a href='oldlibrary.co.uk/'>Arisaig, The Old Library</a>",
+    "<a href='https://www.isleofskye.com/skye-guide/top-ten-skye-walks/old-man-of-storr'>Isle of Skye, Old Man of Storr</a>",
+    "<a href='www.dunvegancastle.com'>Isle of Skye, Dunvegan Castle</a>",
+    "<a href='www.malts.com/en-row/our-whisky-collection/talisker'>Isle of Skye, Talisker Distillery</a>",
+    "<a href='www.eileandonancastle.com'>Eilean Donan Castle</a>",
+    "<a href='stayatalighthouse.co.uk'>Gairloch, Rua Reidh Lighthouse</a>",
+    "<a href='www.kyleskuhotel.co.uk'>Kylesku</a>",
+    "<a href='dunnethead.co.uk'>Dunnet Head</a>",
+    "<a href='www.visitjohnogroats.com/things/coastal-walk/'>Duncansby Head</a>",
+    "<a href='www.jdwetherspoon.com'>Wick, The Alexander Bain</a>",
+    "<a href='www.dunrobincastle.co.uk'>Dunrobin Castle</a>",
+    "<a href='www.glenmorangie.com'>Tain, Glenmorangie Distillery</a>",
+    "<a href='www.ceresgames.co.uk'>Ceres, Highland Games</a>")
+
+scotColors <- c(
+    "blue",
+    "red",
+    "green",
+    "green",
+    "green",
+    "blue",
+    "red",
+    "green",
+    "blue",
+    "black",
+    "blue",
+    "green",
+    "green",
+    "green",
+    "green",
+    "red",
+    "blue",
+    "black",
+    "green")
+
+df <- data.frame(lat = scotLat,
+  lng = scotLng,
+  col = scotColors,
+  site = scotSites)
+
+df %>%
+leaflet() %>%
+addTiles() %>%
+addCircleMarkers(popup = df$site,
+                 color = df$col,
+                 clusterOptions = markerClusterOptions()) %>%
+addPolylines(lat = df$lat, lng = df$lng) %>%
+addLegend(labels = c("Castle", "Pub", "Town / Place", "Distillery"),
+          colors = c("blue", "red", "green", "black"))
+
+```

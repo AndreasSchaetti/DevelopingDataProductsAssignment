@@ -1,0 +1,58 @@
+---
+title: "Plotly exercise"
+author: "Andreas Schätti"
+date: "01/19/2017"
+output: ioslides_presentation
+---
+
+## OECD data of PISA test, girls (1/2)
+
+```{r, include=FALSE}
+library(dplyr)
+library(plotly)
+
+# Create data frame
+oecd.pisa <- read.csv("oecd_pisa.csv")
+oecd.pisa$hover <- with(oecd.pisa, Country)
+
+oecd.pisa.science.girls <- oecd.pisa %>% filter(Indicator == "PISA scores, Science", Sex == "Girls")
+oecd.pisa.science.boys <- oecd.pisa %>% filter(Indicator == "PISA scores, Science", Sex == "Boys")
+
+# Make state borders white
+borders <- list(color = toRGB("white"))
+
+# Set up some mapping options
+map_options <- list(
+  scope = 'europe',
+  projection = list(type = 'azimuthal equal area'),
+  showlakes = TRUE,
+  lakecolor = toRGB('white')
+)
+```
+
+```{r, echo=FALSE}
+plot_ly(z = ~oecd.pisa.science.girls$Value,
+        text = ~oecd.pisa.science.girls$hover,
+        locations = ~oecd.pisa.science.girls$Country, 
+        type = 'choropleth', 
+        locationmode = 'country names',
+        color = oecd.pisa.science.girls$Value, 
+        colors = 'Greens',
+        marker = list(line = borders)) %>%
+  layout(title = 'PISA science scores of girls for the year 2012 (higher is better)', geo = map_options)
+```
+
+## OECD data of PISA test, boys (2/2)
+
+```{r, echo=FALSE}
+plot_ly(z = ~oecd.pisa.science.boys$Value,
+        text = ~oecd.pisa.science.boys$hover,
+        locations = ~oecd.pisa.science.boys$Country, 
+        type = 'choropleth', 
+        locationmode = 'country names',
+        color = oecd.pisa.science.boys$Value, 
+        colors = 'Greens',
+        marker = list(line = borders)) %>%
+  layout(title = 'PISA science scores of boys for the year 2012 (higher is better)', geo = map_options)
+```
+
