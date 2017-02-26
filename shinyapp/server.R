@@ -11,12 +11,15 @@ titanic.data$Pclass <- as.factor(titanic.data$Pclass)
 is.na.age <- is.na(titanic.data$Age)
 is.female <- titanic.data$Sex == "female"
 
+n.samples.female <- sum(is.na.age & is.female)
+n.samples.male <- sum(is.na.age & !is.female)
+
 sampled.age.female <- sample(titanic.data$Age[!is.na.age & is.female],
-                             length(titanic.data$Age[is.na.age & is.female]),
+                             n.samples.female,
                              replace=TRUE)
 sampled.age.male <- sample(titanic.data$Age[!is.na.age & !is.female],
-                          length(titanic.data$Age[is.na.age & !is.female]),
-                          replace=TRUE)
+                           n.samples.male,
+                           replace=TRUE)
 
 titanic.data$Age[is.na.age & is.female] <- sampled.age.female
 titanic.data$Age[is.na.age & !is.female] <- sampled.age.male
